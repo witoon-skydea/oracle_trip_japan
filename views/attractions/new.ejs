@@ -1,0 +1,41 @@
+<h1>เพิ่มแหล่งท่องเที่ยวใหม่</h1>
+
+<% if (typeof error !== 'undefined') { %>
+  <div class="error">
+    <%= error %>
+  </div>
+<% } %>
+
+<form action="/attractions" method="POST">
+  <div class="form-group">
+    <label for="name">ชื่อแหล่งท่องเที่ยว</label>
+    <input type="text" id="name" name="name" class="form-control" value="<%= attraction.name %>" required>
+  </div>
+  
+  <div class="form-group">
+    <label for="location">ตำแหน่งที่ตั้ง</label>
+    <input type="text" id="location" name="location" class="form-control" value="<%= attraction.location %>" required>
+  </div>
+  
+  <div class="form-group">
+    <label for="description">รายละเอียด</label>
+    <textarea id="description" name="description" class="form-control" required><%= attraction.description %></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label for="type">ประเภท (คั่นด้วยเครื่องหมายคอมม่า)</label>
+    <input type="text" id="type" name="type" class="form-control" value="<%= attraction.type %>" required>
+    <small>เช่น: ธรรมชาติ, เกาะ, เดินป่า</small>
+  </div>
+  
+  <div class="form-group">
+    <label for="image_url">URL รูปภาพ</label>
+    <input type="text" id="image_url" name="image_url" class="form-control" value="<%= attraction.image_url %>">
+    <small>หากไม่ระบุ ระบบจะใช้รูปภาพตัวอย่าง</small>
+  </div>
+  
+  <div class="form-group">
+    <button type="submit" class="btn btn-success">บันทึก</button>
+    <a href="/attractions" class="btn btn-primary">ยกเลิก</a>
+  </div>
+</form>

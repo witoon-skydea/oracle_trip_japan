@@ -1,0 +1,30 @@
+<h1>แหล่งท่องเที่ยวทั้งหมด</h1>
+
+<div class="actions">
+  <a href="/attractions/new" class="btn btn-primary">เพิ่มแหล่งท่องเที่ยวใหม่</a>
+</div>
+
+<% if (attractions.length > 0) { %>
+  <div class="grid">
+    <% attractions.forEach(attraction => { %>
+      <div class="card">
+        <div class="card-image">
+          <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>">
+        </div>
+        <div class="card-content">
+          <h2 class="card-title"><%= attraction.name %></h2>
+          <p class="card-location"><%= attraction.location %></p>
+          <p class="card-description"><%= attraction.description.substring(0, 100) %>...</p>
+          <div class="card-tags">
+            <% attraction.type.split(',').forEach(type => { %>
+              <span class="tag"><%= type.trim() %></span>
+            <% }) %>
+          </div>
+          <a href="/attractions/<%= attraction.id %>" class="btn btn-primary">ดูรายละเอียด</a>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <p>ยังไม่มีข้อมูลแหล่งท่องเที่ยว <a href="/attractions/new">เพิ่มแหล่งท่องเที่ยวใหม่</a></p>
+<% } %>

@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-image">
+    <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>">
+  </div>
+  <div class="card-content">
+    <h1 class="card-title"><%= attraction.name %></h1>
+    <p class="card-location"><%= attraction.location %></p>
+    
+    <h3>รายละเอียด</h3>
+    <p class="card-description"><%= attraction.description %></p>
+    
+    <h3>ประเภท</h3>
+    <div class="card-tags">
+      <% attraction.type.split(',').forEach(type => { %>
+        <span class="tag"><%= type.trim() %></span>
+      <% }) %>
+    </div>
+    
+    <div class="actions" style="margin-top: 1.5rem;">
+      <a href="/attractions/<%= attraction.id %>/edit" class="btn btn-secondary">แก้ไข</a>
+      
+      <form action="/attractions/<%= attraction.id %>?_method=DELETE" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่ต้องการลบแหล่งท่องเที่ยวนี้?')">ลบ</button>
+      </form>
+      
+      <a href="/attractions" class="btn btn-primary">กลับไปยังรายการทั้งหมด</a>
+    </div>
+  </div>
+</div>

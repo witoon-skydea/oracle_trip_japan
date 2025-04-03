@@ -1,0 +1,12 @@
+<div class="error-page">
+  <h1>เกิดข้อผิดพลาด</h1>
+  <h2><%= message %></h2>
+  <% if (process.env.NODE_ENV !== 'production') { %>
+    <h3><%= error.status %></h3>
+    <pre><%= error.stack %></pre>
+  <% } %>
+  <div class="actions">
+    <a href="/" class="btn btn-primary">กลับสู่หน้าหลัก</a>
+    <a href="/attractions" class="btn btn-secondary">ดูแหล่งท่องเที่ยวทั้งหมด</a>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title != 'undefined' ? title : 'Oracle Trip - แหล่งท่องเที่ยวในญี่ปุ่น' %></title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&family=Sarabun:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Oracle Trip</h1>
+      <nav>
+        <a href="/">หน้าหลัก</a> | 
+        <a href="/attractions">แหล่งท่องเที่ยวทั้งหมด</a> | 
+        <a href="/attractions/new">เพิ่มแหล่งท่องเที่ยวใหม่</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <%- body %>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Oracle Trip - แหล่งข้อมูลท่องเที่ยวในญี่ปุ่น</p>
+    </div>
+  </footer>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
