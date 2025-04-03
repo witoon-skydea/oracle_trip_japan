@@ -14,8 +14,8 @@ Oracle Trip เป็นเว็บแอปพลิเคชันสำห�
 
 1. โคลนโปรเจค
 ```
-git clone <repository-url>
-cd oracle_trip
+git clone https://github.com/witoon-skydea/oracle_trip_japan.git
+cd oracle_trip_japan
 ```
 
 2. ติดตั้ง dependencies
@@ -26,7 +26,7 @@ npm install
 3. สร้างไฟล์ .env และกำหนดค่า
 ```
 PORT=3000
-MONGODB_URI=<your-mongodb-connection-string>
+MONGODB_URI=mongodb+srv://yourusername:yourpassword@yourcluster.mongodb.net/oracle_trip?retryWrites=true&w=majority
 ```
 
 4. รันแอปพลิเคชัน
