@@ -9,12 +9,12 @@
     <% attractions.forEach(attraction => { %>
       <div class="card">
         <div class="card-image">
-          <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>">
+          <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=ไม่พบรูปภาพ'">
         </div>
         <div class="card-content">
           <h2 class="card-title"><%= attraction.name %></h2>
-          <p class="card-location"><%= attraction.location %></p>
-          <p class="card-description"><%= attraction.description.substring(0, 100) %>...</p>
+          <p class="card-location"><%= attraction.prefecture ? attraction.prefecture : attraction.location %></p>
+          <p class="card-description"><%= attraction.description && attraction.description.length > 100 ? attraction.description.substring(0, 100) + '...' : attraction.description %></p>
           <div class="card-tags">
             <% attraction.type.split(',').forEach(type => { %>
               <span class="tag"><%= type.trim() %></span>
