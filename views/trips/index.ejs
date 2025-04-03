@@ -1,0 +1,69 @@
+<h1>ทริปของฉัน</h1>
+
+<div class="actions">
+  <a href="/trips/new" class="btn btn-primary">สร้างทริปใหม่</a>
+  <a href="/trips/public" class="btn btn-outline-secondary">ดูทริปที่แนะนำ</a>
+</div>
+
+<% if (trips.length > 0) { %>
+  <div class="trips-container">
+    <% trips.forEach(trip => { %>
+      <div class="trip-card">
+        <div class="trip-cover">
+          <img src="<%= trip.cover_image %>" alt="<%= trip.title %>">
+          <span class="trip-status status-<%= trip.status %>">
+            <% if (trip.status === 'planning') { %>
+              วางแผน
+            <% } else if (trip.status === 'completed') { %>
+              เสร็จสิ้น
+            <% } else if (trip.status === 'cancelled') { %>
+              ยกเลิก
+            <% } %>
+          </span>
+          <% if (trip.is_public) { %>
+            <span class="trip-visibility public">สาธารณะ</span>
+          <% } else { %>
+            <span class="trip-visibility private">ส่วนตัว</span>
+          <% } %>
+        </div>
+        
+        <div class="trip-content">
+          <h2><%= trip.title %></h2>
+          
+          <div class="trip-date">
+            <% if (trip.start_date && trip.end_date) { %>
+              <i class="fas fa-calendar"></i>
+              <%= new Date(trip.start_date).toLocaleDateString('th-TH') %> - <%= new Date(trip.end_date).toLocaleDateString('th-TH') %>
+            <% } else { %>
+              <i class="fas fa-calendar"></i> ยังไม่ได้กำหนดวันเดินทาง
+            <% } %>
+          </div>
+          
+          <% if (trip.total_budget) { %>
+            <div class="trip-budget">
+              <i class="fas fa-coins"></i> งบประมาณ: <%= trip.total_budget.toLocaleString() %> บาท
+            </div>
+          <% } %>
+          
+          <p class="trip-description"><%= trip.description.substring(0, 150) %>...</p>
+          
+          <div class="attractions-count">
+            <i class="fas fa-map-marker-alt"></i> จำนวนสถานที่: <%= trip.attractions.length %> แห่ง
+          </div>
+          
+          <div class="trip-actions">
+            <a href="/trips/<%= trip._id %>" class="btn btn-primary">ดูรายละเอียด</a>
+            <a href="/trips/<%= trip._id %>/edit" class="btn btn-outline-secondary">แก้ไข</a>
+            <form action="/trips/<%= trip._id %>?_method=DELETE" method="POST" class="delete-form">
+              <button type="submit" class="btn btn-outline-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบทริปนี้?')">ลบ</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <div class="no-trips">
+    <p>คุณยังไม่มีทริปใดๆ กดปุ่ม "สร้างทริปใหม่" เพื่อวางแผนการเดินทางของคุณ</p>
+  </div>
+<% } %>

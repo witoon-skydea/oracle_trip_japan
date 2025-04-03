@@ -1,0 +1,64 @@
+<h1>ลงทะเบียนผู้ใช้ใหม่</h1>
+
+<% if (typeof error !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
+<form method="POST" action="/auth/register">
+  <div class="form-group">
+    <label for="username">ชื่อผู้ใช้</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      class="form-control"
+      value="<%= typeof username !== 'undefined' ? username : '' %>"
+      required
+      minlength="3"
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="email">อีเมล</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      class="form-control"
+      value="<%= typeof email !== 'undefined' ? email : '' %>"
+      required
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="password">รหัสผ่าน</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class="form-control"
+      required
+      minlength="6"
+    >
+    <small class="form-text text-muted">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</small>
+  </div>
+  
+  <div class="form-group">
+    <label for="confirmPassword">ยืนยันรหัสผ่าน</label>
+    <input
+      type="password"
+      id="confirmPassword"
+      name="confirmPassword"
+      class="form-control"
+      required
+      minlength="6"
+    >
+  </div>
+  
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">ลงทะเบียน</button>
+    <a href="/auth/login" class="btn btn-link">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</a>
+  </div>
+</form>

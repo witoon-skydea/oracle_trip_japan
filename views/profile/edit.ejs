@@ -1,0 +1,52 @@
+<h1>แก้ไขโปรไฟล์</h1>
+
+<% if (typeof error !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
+<form method="POST" action="/profile?_method=PUT">
+  <div class="form-group">
+    <label for="username">ชื่อผู้ใช้</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      class="form-control"
+      value="<%= user.username %>"
+      required
+      minlength="3"
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="email">อีเมล</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      class="form-control"
+      value="<%= user.email %>"
+      required
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="profile_image">รูปโปรไฟล์ (URL)</label>
+    <input
+      type="url"
+      id="profile_image"
+      name="profile_image"
+      class="form-control"
+      value="<%= user.profile_image %>"
+      placeholder="https://example.com/image.jpg"
+    >
+    <small class="form-text text-muted">URL ของรูปโปรไฟล์ (ถ้าไม่ระบุจะใช้รูปเดิม)</small>
+  </div>
+  
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+    <a href="/profile" class="btn btn-outline-secondary">ยกเลิก</a>
+  </div>
+</form>
