@@ -32,8 +32,10 @@ router.post('/', async (req, res) => {
   const attraction = new Attraction({
     name: req.body.name,
     location: req.body.location,
+    prefecture: req.body.prefecture,
     description: req.body.description,
     type: req.body.type,
+    season: req.body.season || 'all-year',
     image_url: req.body.image_url || undefined
   });
 
@@ -110,8 +112,10 @@ router.put('/:id', async (req, res) => {
     
     attraction.name = req.body.name;
     attraction.location = req.body.location;
+    attraction.prefecture = req.body.prefecture;
     attraction.description = req.body.description;
     attraction.type = req.body.type;
+    attraction.season = req.body.season || 'all-year';
     attraction.image_url = req.body.image_url;
     
     await attraction.save();

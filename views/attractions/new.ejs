@@ -18,6 +18,12 @@
   </div>
   
   <div class="form-group">
+    <label for="prefecture">จังหวัด</label>
+    <input type="text" id="prefecture" name="prefecture" class="form-control" value="<%= attraction.prefecture %>" required>
+    <small>เช่น: คาโกชิมะ, โตเกียว, โอซาก้า</small>
+  </div>
+  
+  <div class="form-group">
     <label for="description">รายละเอียด</label>
     <textarea id="description" name="description" class="form-control" required><%= attraction.description %></textarea>
   </div>
@@ -26,6 +32,17 @@
     <label for="type">ประเภท (คั่นด้วยเครื่องหมายคอมม่า)</label>
     <input type="text" id="type" name="type" class="form-control" value="<%= attraction.type %>" required>
     <small>เช่น: ธรรมชาติ, เกาะ, เดินป่า</small>
+  </div>
+  
+  <div class="form-group">
+    <label for="season">ฤดูกาลที่เหมาะสม</label>
+    <select id="season" name="season" class="form-control">
+      <option value="all-year" <%= attraction.season === 'all-year' ? 'selected' : '' %>>ตลอดทั้งปี</option>
+      <option value="spring" <%= attraction.season === 'spring' ? 'selected' : '' %>>ฤดูใบไม้ผลิ</option>
+      <option value="summer" <%= attraction.season === 'summer' ? 'selected' : '' %>>ฤดูร้อน</option>
+      <option value="autumn" <%= attraction.season === 'autumn' ? 'selected' : '' %>>ฤดูใบไม้ร่วง</option>
+      <option value="winter" <%= attraction.season === 'winter' ? 'selected' : '' %>>ฤดูหนาว</option>
+    </select>
   </div>
   
   <div class="form-group">
