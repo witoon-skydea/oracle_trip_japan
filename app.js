@@ -71,7 +71,7 @@ app.use((err, req, res, next) => {
 });
 
 // ตั้งค่าพอร์ตสำหรับรันเซิร์ฟเวอร์
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3456;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // สำหรับการ Seed ข้อมูลเริ่มต้น

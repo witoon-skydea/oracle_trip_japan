@@ -25,7 +25,7 @@ npm install
 
 3. สร้างไฟล์ .env และกำหนดค่า
 ```
-PORT=3000
+PORT=3456
 MONGODB_URI=mongodb+srv://yourusername:yourpassword@yourcluster.mongodb.net/oracle_trip?retryWrites=true&w=majority
 ```
 
@@ -34,7 +34,7 @@ MONGODB_URI=mongodb+srv://yourusername:yourpassword@yourcluster.mongodb.net/orac
 npm run dev
 ```
 
-5. เปิดเบราว์เซอร์และไปที่ http://localhost:3000
+5. เปิดเบราว์เซอร์และไปที่ http://localhost:3456
 
 ## เทคโนโลยีที่ใช้
 
