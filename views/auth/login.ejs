@@ -1,0 +1,37 @@
+<h1>เข้าสู่ระบบ</h1>
+
+<% if (typeof error !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
+<form method="POST" action="/auth/login">
+  <div class="form-group">
+    <label for="email">อีเมล</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      class="form-control"
+      value="<%= typeof email !== 'undefined' ? email : '' %>"
+      required
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="password">รหัสผ่าน</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class="form-control"
+      required
+    >
+  </div>
+  
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+    <a href="/auth/register" class="btn btn-link">ยังไม่มีบัญชี? ลงทะเบียน</a>
+  </div>
+</form>

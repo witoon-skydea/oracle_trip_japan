@@ -3,33 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title != 'undefined' ? title : 'Oracle Trip - แหล่งท่องเที่ยวในญี่ปุ่น' %></title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&family=Sarabun:wght@300;400;700&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <title><%= typeof title != 'undefined' ? title + ' - Oracle Trip' : 'Oracle Trip - แหล่งท่องเที่ยวในญี่ปุ่น' %></title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header>
     <div class="container">
-      <h1>Oracle Trip</h1>
-      <nav>
-        <a href="/" class="nav-link"><i class="fa-solid fa-house"></i> หน้าหลัก</a> &nbsp;|&nbsp; 
-        <a href="/attractions" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> แหล่งท่องเที่ยวทั้งหมด</a> &nbsp;|&nbsp; 
-        <a href="/attractions/new" class="nav-link"><i class="fa-solid fa-circle-plus"></i> เพิ่มแหล่งท่องเที่ยวใหม่</a>
-      </nav>
+      <div class="nav-container">
+        <a href="/" class="logo">Oracle Trip</a>
+        
+        <ul class="nav">
+          <li class="nav-item">
+            <a href="/" class="nav-link">หน้าหลัก</a>
+          </li>
+          <li class="nav-item">
+            <a href="/attractions" class="nav-link">แหล่งท่องเที่ยว</a>
+          </li>
+          <li class="nav-item">
+            <a href="/trips/public" class="nav-link">ทริปที่แนะนำ</a>
+          </li>
+          
+          <% if (user && user.isAuthenticated) { %>
+            <li class="nav-item">
+              <a href="/trips" class="nav-link">ทริปของฉัน</a>
+            </li>
+            <li class="nav-item user-menu">
+              <img src="https://placehold.co/100x100/cccccc/ffffff?text=User" alt="<%= user.username %>" class="user-avatar">
+              <div class="dropdown-menu">
+                <a href="/profile" class="dropdown-item">โปรไฟล์</a>
+                <a href="/trips" class="dropdown-item">ทริปของฉัน</a>
+                <a href="/profile" class="dropdown-item">แหล่งท่องเที่ยวที่บันทึก</a>
+                <% if (user.isAdmin) { %>
+                  <a href="/admin" class="dropdown-item">จัดการระบบ</a>
+                <% } %>
+                <a href="/auth/logout" class="dropdown-item">ออกจากระบบ</a>
+              </div>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a href="/auth/login" class="nav-link">เข้าสู่ระบบ</a>
+            </li>
+            <li class="nav-item">
+              <a href="/auth/register" class="nav-link">ลงทะเบียน</a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
     </div>
   </header>
-
+  
   <main class="container">
     <%- body %>
   </main>
-
+  
   <footer>
     <div class="container">
-      <p>&copy; <%= new Date().getFullYear() %> Oracle Trip - แหล่งข้อมูลท่องเที่ยวในญี่ปุ่น</p>
+      <div class="footer-content">
+        <p>&copy; <%= new Date().getFullYear() %> Oracle Trip - แหล่งข้อมูลท่องเที่ยวในญี่ปุ่น</p>
+        
+        <ul class="footer-links">
+          <li class="footer-link">
+            <a href="/">หน้าหลัก</a>
+          </li>
+          <li class="footer-link">
+            <a href="/attractions">แหล่งท่องเที่ยว</a>
+          </li>
+          <li class="footer-link">
+            <a href="/trips/public">ทริปที่แนะนำ</a>
+          </li>
+          <li class="footer-link">
+            <a href="/about">เกี่ยวกับเรา</a>
+          </li>
+          <li class="footer-link">
+            <a href="/contact">ติดต่อเรา</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </footer>
 
+  <!-- JavaScript ที่จำเป็น -->
   <script src="/js/script.js"></script>
+  
+  <% if (typeof extraScripts !== 'undefined') { %>
+    <%- extraScripts %>
+  <% } %>
 </body>
 </html>

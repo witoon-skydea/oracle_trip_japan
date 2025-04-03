@@ -1,0 +1,166 @@
+<div class="review-detail">
+  <div class="review-header">
+    <h1><%= review.title %></h1>
+    <div class="review-meta">
+      <div class="review-attraction">
+        <a href="/attractions/<%= review.attraction._id %>"><%= review.attraction.name %></a>
+      </div>
+      <div class="review-rating">
+        <% for(let i = 1; i <= 5; i++) { %>
+          <span class="star <%= i <= review.rating ? 'filled' : '' %>">★</span>
+        <% } %>
+      </div>
+    </div>
+    <div class="review-author">
+      <img src="<%= review.user.profile_image %>" alt="<%= review.user.username %>">
+      <div class="author-info">
+        <div class="author-name"><%= review.user.username %></div>
+        <div class="review-date">
+          รีวิวเมื่อ <%= new Date(review.created_at).toLocaleDateString('th-TH') %>
+          <% if (review.visit_date) { %>
+            | เข้าชมเมื่อ <%= new Date(review.visit_date).toLocaleDateString('th-TH') %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="review-content">
+    <div class="review-text">
+      <%= review.comment %>
+    </div>
+    
+    <% if (review.photos && review.photos.length > 0) { %>
+      <div class="review-gallery">
+        <h3>รูปภาพประกอบ</h3>
+        <div class="photo-grid">
+          <% review.photos.forEach(photo => { %>
+            <div class="photo-item">
+              <img src="<%= photo %>" alt="รูปภาพรีวิว">
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+  
+  <div class="review-actions">
+    <a href="/attractions/<%= review.attraction._id %>#reviews" class="btn btn-primary">กลับไปยังแหล่งท่องเที่ยว</a>
+    
+    <% if (isOwner) { %>
+      <a href="/reviews/<%= review._id %>/edit" class="btn btn-secondary">แก้ไขรีวิว</a>
+      <form action="/reviews/<%= review._id %>?_method=DELETE" method="POST" class="delete-form">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบรีวิวนี้?')">ลบรีวิว</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<style>
+  .review-detail {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .review-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .review-header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .review-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .review-attraction {
+    font-size: 1.25rem;
+  }
+  
+  .review-attraction a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  .review-rating {
+    font-size: 1.5rem;
+  }
+  
+  .star {
+    color: #e0e0e0;
+  }
+  
+  .star.filled {
+    color: #ffc107;
+  }
+  
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .review-author img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .author-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .review-date {
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+  
+  .review-content {
+    margin-bottom: 2rem;
+  }
+  
+  .review-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  
+  .review-gallery h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .photo-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .photo-item img:hover {
+    transform: scale(1.05);
+  }
+  
+  .review-actions {
+    display: flex;
+    gap: 1rem;
+  }
+</style>

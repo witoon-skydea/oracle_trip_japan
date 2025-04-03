@@ -1,7 +1,7 @@
 {
-  "name": "oracle_trip",
+  "name": "oracle_trip_japan",
   "version": "1.0.0",
-  "description": "Web application for managing tourist attractions",
+  "description": "Web application for managing Japanese tourist attractions, trips and reviews",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -11,6 +11,9 @@
   "keywords": [
     "tourism",
     "attractions",
+    "japan",
+    "trips",
+    "travel",
     "node",
     "express",
     "mongodb"
@@ -18,13 +21,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
-    "mongoose": "^8.13.1"
+    "mongoose": "^8.13.1",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

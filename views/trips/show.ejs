@@ -1,0 +1,128 @@
+<div class="trip-detail">
+  <div class="trip-header" style="background-image: url('<%= trip.cover_image %>')">
+    <div class="trip-header-overlay">
+      <h1><%= trip.title %></h1>
+      
+      <div class="trip-meta">
+        <div class="trip-author">
+          <img src="<%= trip.user.profile_image %>" alt="<%= trip.user.username %>">
+          <%= trip.user.username %>
+        </div>
+        
+        <div class="trip-status status-<%= trip.status %>">
+          <% if (trip.status === 'planning') { %>
+            <i class="fas fa-clipboard-list"></i> วางแผน
+          <% } else if (trip.status === 'completed') { %>
+            <i class="fas fa-check-circle"></i> เสร็จสิ้น
+          <% } else if (trip.status === 'cancelled') { %>
+            <i class="fas fa-times-circle"></i> ยกเลิก
+          <% } %>
+        </div>
+        
+        <div class="trip-visibility <%= trip.is_public ? 'public' : 'private' %>">
+          <% if (trip.is_public) { %>
+            <i class="fas fa-globe"></i> สาธารณะ
+          <% } else { %>
+            <i class="fas fa-lock"></i> ส่วนตัว
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="trip-actions">
+    <% if (isOwner) { %>
+      <a href="/trips/<%= trip._id %>/edit" class="btn btn-primary"><i class="fas fa-edit"></i> แก้ไขทริป</a>
+      <form action="/trips/<%= trip._id %>?_method=DELETE" method="POST" class="delete-form">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบทริปนี้?')">
+          <i class="fas fa-trash"></i> ลบทริป
+        </button>
+      </form>
+    <% } %>
+  </div>
+  
+  <div class="trip-content">
+    <div class="trip-info">
+      <div class="trip-dates">
+        <h3><i class="fas fa-calendar-alt"></i> วันเดินทาง</h3>
+        <% if (trip.start_date && trip.end_date) { %>
+          <p>
+            <%= new Date(trip.start_date).toLocaleDateString('th-TH') %> - <%= new Date(trip.end_date).toLocaleDateString('th-TH') %>
+            <% 
+              const start = new Date(trip.start_date);
+              const end = new Date(trip.end_date);
+              const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+            %>
+            (<%= days %> วัน)
+          </p>
+        <% } else { %>
+          <p>ยังไม่ได้กำหนดวันเดินทาง</p>
+        <% } %>
+      </div>
+      
+      <% if (trip.total_budget) { %>
+        <div class="trip-budget">
+          <h3><i class="fas fa-coins"></i> งบประมาณ</h3>
+          <p><%= trip.total_budget.toLocaleString() %> บาท</p>
+        </div>
+      <% } %>
+    </div>
+    
+    <div class="trip-description">
+      <h3><i class="fas fa-info-circle"></i> รายละเอียด</h3>
+      <p><%= trip.description %></p>
+    </div>
+    
+    <div class="trip-itinerary">
+      <h3><i class="fas fa-map-marked-alt"></i> กำหนดการเดินทาง</h3>
+      
+      <% if (trip.attractions.length > 0) { %>
+        <% 
+          // จัดกลุ่มตามวัน
+          const attractionsByDay = {};
+          trip.attractions.forEach(item => {
+            if (!attractionsByDay[item.day]) {
+              attractionsByDay[item.day] = [];
+            }
+            attractionsByDay[item.day].push(item);
+          });
+          
+          // เรียงลำดับตามวันและลำดับในวัน
+          Object.keys(attractionsByDay).sort((a, b) => a - b).forEach(day => {
+            attractionsByDay[day].sort((a, b) => a.order - b.order);
+          });
+        %>
+        
+        <div class="itinerary-days">
+          <% Object.keys(attractionsByDay).sort((a, b) => a - b).forEach(day => { %>
+            <div class="itinerary-day">
+              <h4>วันที่ <%= day %></h4>
+              
+              <div class="day-attractions">
+                <% attractionsByDay[day].forEach(item => { %>
+                  <div class="attraction-item">
+                    <div class="attraction-order"><%= item.order %></div>
+                    <div class="attraction-content">
+                      <img src="<%= item.attraction.image_url %>" alt="<%= item.attraction.name %>">
+                      <div class="attraction-info">
+                        <h5><a href="/attractions/<%= item.attraction._id %>"><%= item.attraction.name %></a></h5>
+                        <p class="attraction-location"><%= item.attraction.location %></p>
+                        <% if (item.notes) { %>
+                          <div class="attraction-notes">
+                            <p><strong>โน้ต:</strong> <%= item.notes %></p>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>ยังไม่มีสถานที่ท่องเที่ยวในทริปนี้</p>
+      <% } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,241 @@
+<h1>สร้างทริปใหม่</h1>
+
+<% if (typeof error !== 'undefined') { %>
+  <div class="alert alert-danger">
+    <p><%= error %></p>
+  </div>
+<% } %>
+
+<form method="POST" action="/trips">
+  <div class="form-group">
+    <label for="title">ชื่อทริป</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      value="<%= typeof trip.title !== 'undefined' ? trip.title : '' %>"
+      required
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="description">รายละเอียดทริป</label>
+    <textarea
+      id="description"
+      name="description"
+      class="form-control"
+      rows="4"
+      required
+    ><%= typeof trip.description !== 'undefined' ? trip.description : '' %></textarea>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="start_date">วันเริ่มต้น</label>
+      <input
+        type="date"
+        id="start_date"
+        name="start_date"
+        class="form-control"
+        value="<%= typeof trip.start_date !== 'undefined' ? trip.start_date : '' %>"
+      >
+    </div>
+    
+    <div class="form-group col-md-6">
+      <label for="end_date">วันสิ้นสุด</label>
+      <input
+        type="date"
+        id="end_date"
+        name="end_date"
+        class="form-control"
+        value="<%= typeof trip.end_date !== 'undefined' ? trip.end_date : '' %>"
+      >
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="total_budget">งบประมาณ (บาท)</label>
+    <input
+      type="number"
+      id="total_budget"
+      name="total_budget"
+      class="form-control"
+      value="<%= typeof trip.total_budget !== 'undefined' ? trip.total_budget : '' %>"
+      min="0"
+      step="100"
+    >
+  </div>
+  
+  <div class="form-group">
+    <label for="cover_image">รูปปก (URL)</label>
+    <input
+      type="url"
+      id="cover_image"
+      name="cover_image"
+      class="form-control"
+      placeholder="https://example.com/image.jpg"
+      value="<%= typeof trip.cover_image !== 'undefined' ? trip.cover_image : '' %>"
+    >
+    <small class="form-text text-muted">ถ้าไม่ระบุจะใช้รูปเริ่มต้น</small>
+  </div>
+  
+  <div class="form-group form-check">
+    <input
+      type="checkbox"
+      id="is_public"
+      name="is_public"
+      class="form-check-input"
+      <%= typeof trip.is_public !== 'undefined' && trip.is_public ? 'checked' : '' %>
+    >
+    <label class="form-check-label" for="is_public">เผยแพร่ให้ผู้อื่นเห็น</label>
+  </div>
+  
+  <h3>สถานที่ท่องเที่ยว</h3>
+  <div id="attractions-container">
+    <div class="attraction-entry">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>สถานที่</label>
+          <select name="attractions[attraction]" class="form-control" required>
+            <option value="">เลือกสถานที่ท่องเที่ยว</option>
+            <% attractions.forEach(attraction => { %>
+              <option value="<%= attraction._id %>"><%= attraction.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        
+        <div class="form-group col-md-2">
+          <label>วันที่</label>
+          <input
+            type="number"
+            name="attractions[day]"
+            class="form-control"
+            min="1"
+            value="1"
+            required
+          >
+        </div>
+        
+        <div class="form-group col-md-2">
+          <label>ลำดับ</label>
+          <input
+            type="number"
+            name="attractions[order]"
+            class="form-control"
+            min="1"
+            value="1"
+            required
+          >
+        </div>
+        
+        <div class="form-group col-md-2">
+          <label>&nbsp;</label>
+          <button type="button" class="btn btn-outline-success btn-block add-attraction">เพิ่ม</button>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>โน้ต</label>
+        <textarea name="attractions[notes]" class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">สร้างทริป</button>
+    <a href="/trips" class="btn btn-outline-secondary">ยกเลิก</a>
+  </div>
+</form>
+
+<template id="attraction-template">
+  <div class="attraction-entry mt-3 border-top pt-3">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label>สถานที่</label>
+        <select name="attractions[attraction]" class="form-control" required>
+          <option value="">เลือกสถานที่ท่องเที่ยว</option>
+          <% attractions.forEach(attraction => { %>
+            <option value="<%= attraction._id %>"><%= attraction.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      
+      <div class="form-group col-md-2">
+        <label>วันที่</label>
+        <input
+          type="number"
+          name="attractions[day]"
+          class="form-control"
+          min="1"
+          value="1"
+          required
+        >
+      </div>
+      
+      <div class="form-group col-md-2">
+        <label>ลำดับ</label>
+        <input
+          type="number"
+          name="attractions[order]"
+          class="form-control"
+          min="1"
+          value="1"
+          required
+        >
+      </div>
+      
+      <div class="form-group col-md-2">
+        <label>&nbsp;</label>
+        <button type="button" class="btn btn-outline-danger btn-block remove-attraction">ลบ</button>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>โน้ต</label>
+      <textarea name="attractions[notes]" class="form-control" rows="2"></textarea>
+    </div>
+  </div>
+</template>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // เพิ่มสถานที่ท่องเที่ยว
+    document.querySelectorAll('.add-attraction').forEach(button => {
+      button.addEventListener('click', addAttraction);
+    });
+    
+    // ลบสถานที่ท่องเที่ยว
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('remove-attraction')) {
+        e.target.closest('.attraction-entry').remove();
+      }
+    });
+    
+    function addAttraction() {
+      const template = document.getElementById('attraction-template');
+      const attractionEntry = template.content.cloneNode(true);
+      
+      // อัพเดทชื่อฟิลด์ให้เป็น array
+      const index = document.querySelectorAll('.attraction-entry').length;
+      
+      attractionEntry.querySelectorAll('[name="attractions[attraction]"]').forEach(el => {
+        el.name = `attractions[attraction][${index}]`;
+      });
+      
+      attractionEntry.querySelectorAll('[name="attractions[day]"]').forEach(el => {
+        el.name = `attractions[day][${index}]`;
+      });
+      
+      attractionEntry.querySelectorAll('[name="attractions[order]"]').forEach(el => {
+        el.name = `attractions[order][${index}]`;
+      });
+      
+      attractionEntry.querySelectorAll('[name="attractions[notes]"]').forEach(el => {
+        el.name = `attractions[notes][${index}]`;
+      });
+      
+      document.getElementById('attractions-container').appendChild(attractionEntry);
+    }
+  });
+</script>

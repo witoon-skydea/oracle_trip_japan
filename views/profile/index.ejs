@@ -1,0 +1,116 @@
+<h1>โปรไฟล์ของฉัน</h1>
+
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-image">
+      <img src="<%= user.profile_image %>" alt="<%= user.username %>">
+    </div>
+    <div class="profile-info">
+      <h2><%= user.username %></h2>
+      <p><%= user.email %></p>
+      <div class="profile-actions">
+        <a href="/profile/edit" class="btn btn-outline-primary">แก้ไขโปรไฟล์</a>
+        <a href="/profile/change-password" class="btn btn-outline-secondary">เปลี่ยนรหัสผ่าน</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="profile-content">
+    <div class="profile-section">
+      <h3>ทริปล่าสุดของฉัน</h3>
+      <% if (recentTrips.length > 0) { %>
+        <div class="trips-list">
+          <% recentTrips.forEach(trip => { %>
+            <div class="trip-card">
+              <div class="trip-image">
+                <img src="<%= trip.cover_image %>" alt="<%= trip.title %>">
+              </div>
+              <div class="trip-info">
+                <h4><%= trip.title %></h4>
+                <p class="trip-date">
+                  <% if (trip.start_date && trip.end_date) { %>
+                    <%= new Date(trip.start_date).toLocaleDateString('th-TH') %> - <%= new Date(trip.end_date).toLocaleDateString('th-TH') %>
+                  <% } else { %>
+                    ยังไม่ได้กำหนดวันเดินทาง
+                  <% } %>
+                </p>
+                <p class="trip-status">สถานะ: 
+                  <span class="status-<%= trip.status %>">
+                    <% if (trip.status === 'planning') { %>
+                      วางแผน
+                    <% } else if (trip.status === 'completed') { %>
+                      เสร็จสิ้น
+                    <% } else if (trip.status === 'cancelled') { %>
+                      ยกเลิก
+                    <% } %>
+                  </span>
+                </p>
+                <a href="/trips/<%= trip._id %>" class="btn btn-sm btn-primary">ดูรายละเอียด</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <div class="see-all">
+          <a href="/trips">ดูทริปทั้งหมด</a>
+        </div>
+      <% } else { %>
+        <p>คุณยังไม่มีทริปใดๆ <a href="/trips/new">สร้างทริปใหม่</a></p>
+      <% } %>
+    </div>
+    
+    <div class="profile-section">
+      <h3>แหล่งท่องเที่ยวที่บันทึกไว้</h3>
+      <% if (savedAttractions.length > 0) { %>
+        <div class="saved-attractions">
+          <% savedAttractions.forEach(attraction => { %>
+            <div class="attraction-card">
+              <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>">
+              <div class="card-content">
+                <h4><%= attraction.name %></h4>
+                <p><%= attraction.location %></p>
+                <div class="card-actions">
+                  <a href="/attractions/<%= attraction._id %>" class="btn btn-sm btn-primary">ดูรายละเอียด</a>
+                  <form action="/profile/unsave-attraction/<%= attraction._id %>?redirect=/profile" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">เลิกบันทึก</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>คุณยังไม่ได้บันทึกแหล่งท่องเที่ยวใดๆ <a href="/attractions">ค้นหาแหล่งท่องเที่ยว</a></p>
+      <% } %>
+    </div>
+    
+    <div class="profile-section">
+      <h3>รีวิวล่าสุดของฉัน</h3>
+      <% if (recentReviews.length > 0) { %>
+        <div class="reviews-list">
+          <% recentReviews.forEach(review => { %>
+            <div class="review-card">
+              <div class="review-header">
+                <h4><%= review.title %></h4>
+                <div class="rating">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <span class="star <%= i <= review.rating ? 'filled' : '' %>">★</span>
+                  <% } %>
+                </div>
+              </div>
+              <p class="review-location">แหล่งท่องเที่ยว: <a href="/attractions/<%= review.attraction._id %>"><%= review.attraction.name %></a></p>
+              <p class="review-date">วันที่: <%= new Date(review.created_at).toLocaleDateString('th-TH') %></p>
+              <p class="review-content"><%= review.comment.substring(0, 100) %>...</p>
+              <div class="review-actions">
+                <a href="/reviews/<%= review._id %>" class="btn btn-sm btn-outline-primary">อ่านต่อ</a>
+                <a href="/reviews/<%= review._id %>/edit" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>คุณยังไม่มีรีวิวใดๆ <a href="/attractions">เขียนรีวิวแหล่งท่องเที่ยว</a></p>
+      <% } %>
+    </div>
+  </div>
+</div>

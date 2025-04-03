@@ -1,29 +1,261 @@
-<div class="card">
-  <div class="card-image">
-    <img src="<%= attraction.image_url %>" alt="<%= attraction.name %>">
+<div class="attraction-detail">
+  <div class="attraction-header" style="background-image: url('<%= attraction.image_url %>')">
+    <div class="attraction-header-overlay">
+      <h1><%= attraction.name %></h1>
+      <div class="attraction-location">
+        <i class="fas fa-map-marker-alt"></i> <%= attraction.location %>
+      </div>
+    </div>
   </div>
-  <div class="card-content">
-    <h1 class="card-title"><%= attraction.name %></h1>
-    <p class="card-location"><%= attraction.location %></p>
+  
+  <div class="attraction-actions">
+    <% if (user.isAuthenticated) { %>
+      <% if (user.saved) { %>
+        <form action="/profile/unsave-attraction/<%= attraction._id %>?redirect=/attractions/<%= attraction._id %>" method="POST">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="btn btn-outline-primary">
+            <i class="fas fa-bookmark"></i> ยกเลิกการบันทึก
+          </button>
+        </form>
+      <% } else { %>
+        <form action="/profile/save-attraction/<%= attraction._id %>" method="POST">
+          <button type="submit" class="btn btn-outline-primary">
+            <i class="far fa-bookmark"></i> บันทึก
+          </button>
+        </form>
+      <% } %>
+    <% } %>
     
-    <h3>รายละเอียด</h3>
-    <p class="card-description"><%= attraction.description %></p>
+    <a href="/attractions" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left"></i> กลับไปยังรายการ
+    </a>
     
-    <h3>ประเภท</h3>
-    <div class="card-tags">
-      <% attraction.type.split(',').forEach(type => { %>
-        <span class="tag"><%= type.trim() %></span>
-      <% }) %>
+    <% if (user.isAdmin) { %>
+      <a href="/attractions/<%= attraction._id %>/edit" class="btn btn-outline-secondary">
+        <i class="fas fa-edit"></i> แก้ไข
+      </a>
+      <form action="/attractions/<%= attraction._id %>?_method=DELETE" method="POST" class="delete-form">
+        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบแหล่งท่องเที่ยวนี้?')">
+          <i class="fas fa-trash"></i> ลบ
+        </button>
+      </form>
+    <% } %>
+  </div>
+  
+  <div class="attraction-content">
+    <div class="attraction-info">
+      <div class="attraction-rating">
+        <% if (attraction.average_rating > 0) { %>
+          <div class="rating-stars">
+            <% for(let i = 1; i <= 5; i++) { %>
+              <span class="star <%= i <= Math.round(attraction.average_rating) ? 'filled' : '' %>">★</span>
+            <% } %>
+          </div>
+          <div class="rating-text">
+            <%= attraction.average_rating.toFixed(1) %> คะแนน (<%= attraction.review_count %> รีวิว)
+          </div>
+        <% } else { %>
+          <div class="rating-text">ยังไม่มีรีวิว</div>
+        <% } %>
+      </div>
+      
+      <div class="attraction-meta">
+        <div class="meta-item">
+          <div class="meta-label">ประเภท</div>
+          <div class="meta-value">
+            <% attraction.type.split(',').forEach(type => { %>
+              <span class="tag"><%= type.trim() %></span>
+            <% }) %>
+          </div>
+        </div>
+        
+        <div class="meta-item">
+          <div class="meta-label">จังหวัด</div>
+          <div class="meta-value"><%= attraction.prefecture %></div>
+        </div>
+        
+        <div class="meta-item">
+          <div class="meta-label">ฤดูกาลที่เหมาะสม</div>
+          <div class="meta-value">
+            <% if (attraction.season === 'spring') { %>
+              <span class="season spring">ฤดูใบไม้ผลิ</span>
+            <% } else if (attraction.season === 'summer') { %>
+              <span class="season summer">ฤดูร้อน</span>
+            <% } else if (attraction.season === 'autumn') { %>
+              <span class="season autumn">ฤดูใบไม้ร่วง</span>
+            <% } else if (attraction.season === 'winter') { %>
+              <span class="season winter">ฤดูหนาว</span>
+            <% } else { %>
+              <span class="season all-year">ตลอดทั้งปี</span>
+            <% } %>
+          </div>
+        </div>
+        
+        <div class="meta-item">
+          <div class="meta-label">ค่าเข้าชม</div>
+          <div class="meta-value"><%= attraction.admission_fee %></div>
+        </div>
+        
+        <div class="meta-item">
+          <div class="meta-label">เวลาเปิด-ปิด</div>
+          <div class="meta-value"><%= attraction.opening_hours %></div>
+        </div>
+        
+        <% if (attraction.website) { %>
+          <div class="meta-item">
+            <div class="meta-label">เว็บไซต์</div>
+            <div class="meta-value">
+              <a href="<%= attraction.website %>" target="_blank" rel="noopener noreferrer">
+                <%= attraction.website %>
+              </a>
+            </div>
+          </div>
+        <% } %>
+      </div>
     </div>
     
-    <div class="actions" style="margin-top: 1.5rem;">
-      <a href="/attractions/<%= attraction.id %>/edit" class="btn btn-secondary">แก้ไข</a>
+    <div class="attraction-description">
+      <h2>รายละเอียด</h2>
+      <p><%= attraction.description %></p>
+    </div>
+    
+    <% if (attraction.gallery && attraction.gallery.length > 0) { %>
+      <div class="attraction-gallery">
+        <h2>แกลเลอรี</h2>
+        <div class="gallery-images">
+          <% attraction.gallery.forEach(image => { %>
+            <div class="gallery-image">
+              <img src="<%= image %>" alt="<%= attraction.name %>">
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+    
+    <% if (attraction.coordinates && attraction.coordinates.lat && attraction.coordinates.lng) { %>
+      <div class="attraction-map">
+        <h2>แผนที่</h2>
+        <div id="map" style="width: 100%; height: 400px;"></div>
+      </div>
       
-      <form action="/attractions/<%= attraction.id %>?_method=DELETE" method="POST" style="display: inline;">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่ต้องการลบแหล่งท่องเที่ยวนี้?')">ลบ</button>
-      </form>
+      <script>
+        function initMap() {
+          const lat = <%= attraction.coordinates.lat %>;
+          const lng = <%= attraction.coordinates.lng %>;
+          const mapOptions = {
+            center: { lat, lng },
+            zoom: 12
+          };
+          
+          const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+          
+          new google.maps.Marker({
+            position: { lat, lng },
+            map,
+            title: '<%= attraction.name %>'
+          });
+        }
+      </script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+    <% } %>
+    
+    <div id="reviews" class="attraction-reviews">
+      <h2>รีวิวจากผู้ใช้ (<%= attraction.review_count || 0 %>)</h2>
       
-      <a href="/attractions" class="btn btn-primary">กลับไปยังรายการทั้งหมด</a>
+      <% if (user.isAuthenticated) { %>
+        <div class="review-form">
+          <h3>เขียนรีวิว</h3>
+          <form action="/attractions/<%= attraction._id %>/reviews" method="POST">
+            <div class="form-group">
+              <label for="rating">คะแนน</label>
+              <div class="rating-input">
+                <% for(let i = 5; i >= 1; i--) { %>
+                  <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>" <%= i === 5 ? 'required' : '' %>>
+                  <label for="star<%= i %>">★</label>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="title">หัวข้อรีวิว</label>
+              <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="comment">ความคิดเห็น</label>
+              <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="visit_date">วันที่เข้าชม</label>
+              <input type="date" id="visit_date" name="visit_date" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">ส่งรีวิว</button>
+          </form>
+        </div>
+      <% } else { %>
+        <div class="review-login-notice">
+          <p>โปรด <a href="/auth/login">เข้าสู่ระบบ</a> เพื่อเขียนรีวิว</p>
+        </div>
+      <% } %>
+      
+      <% if (reviews && reviews.length > 0) { %>
+        <div class="reviews-list">
+          <% reviews.forEach(review => { %>
+            <div class="review-item">
+              <div class="review-header">
+                <div class="review-user">
+                  <img src="<%= review.user.profile_image %>" alt="<%= review.user.username %>">
+                  <div class="user-info">
+                    <div class="username"><%= review.user.username %></div>
+                    <div class="review-date">
+                      รีวิวเมื่อ <%= new Date(review.created_at).toLocaleDateString('th-TH') %>
+                      <% if (review.visit_date) { %>
+                        | เข้าชมเมื่อ <%= new Date(review.visit_date).toLocaleDateString('th-TH') %>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="review-rating">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <span class="star <%= i <= review.rating ? 'filled' : '' %>">★</span>
+                  <% } %>
+                </div>
+              </div>
+              
+              <div class="review-content">
+                <h4><%= review.title %></h4>
+                <p><%= review.comment %></p>
+                
+                <% if (review.photos && review.photos.length > 0) { %>
+                  <div class="review-photos">
+                    <% review.photos.forEach(photo => { %>
+                      <div class="review-photo">
+                        <img src="<%= photo %>" alt="รูปภาพรีวิว">
+                      </div>
+                    <% }) %>
+                  </div>
+                <% } %>
+              </div>
+              
+              <% if (user.isAuthenticated && user.id === review.user._id.toString()) { %>
+                <div class="review-actions">
+                  <a href="/reviews/<%= review._id %>/edit" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                  <form action="/reviews/<%= review._id %>?_method=DELETE" method="POST" class="delete-form">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบรีวิวนี้?')">ลบ</button>
+                  </form>
+                </div>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="no-reviews">
+          <p>ยังไม่มีรีวิวสำหรับแหล่งท่องเที่ยวนี้ เป็นคนแรกที่เขียนรีวิว!</p>
+        </div>
+      <% } %>
     </div>
   </div>
 </div>
