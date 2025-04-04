@@ -64,7 +64,8 @@ router.get('/:id', async (req, res) => {
     }
     res.render('attractions/show', { 
       title: attraction.name,
-      attraction: attraction 
+      attraction: attraction,
+      reviews: [] // ส่ง empty array เพื่อแก้ปัญหา reviews is not defined
     });
   } catch (err) {
     console.error(err);
